@@ -93,6 +93,13 @@ mm128_t *mm_chain_dp(int max_dist_x, int max_dist_y, int bw, int max_skip, int m
 				fclose(opt->chain_dump_out.fp);
 				exit(0);
 			}
+#ifdef SCALAR
+			fprintf(fp, "%lld\t%.6f\t%d\t%d\t%d\t%d\n",
+					(long long)n, avg_qspan, max_dist_x, max_dist_y, bw, n_segs);
+			for (i = 0; i < n; ++i) {
+				fprintf(fp, "%lu\t%lu\n", a[i].x, a[i].y);
+			}
+#else
 			fprintf(fp, "%lld\t%.6f\t%d\t%d\t%d\n",
 					(long long)n, avg_qspan, max_dist_x, max_dist_y, bw);
 			for (i = 0; i < n; ++i) {
@@ -102,6 +109,7 @@ mm128_t *mm_chain_dp(int max_dist_x, int max_dist_y, int bw, int max_skip, int m
 						(int)(int32_t)(a[i].y >> 32 & 0xff),
 						(int)(int32_t)(a[i].y));
 			}
+#endif
 			fprintf(fp, "EOR\n");
 		}
 
